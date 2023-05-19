@@ -1,15 +1,4 @@
- <img align="left" width="116" height="116" src="https://raw.githubusercontent.com/jasontaylordev/CleanArchitecture/main/.github/icon.png" />
- 
- # Clean Architecture Solution Template
-[![Build](https://github.com/jasontaylordev/CleanArchitecture/actions/workflows/dotnet-build.yml/badge.svg)](https://github.com/jasontaylordev/CleanArchitecture/actions/workflows/dotnet-build.yml)
-[![CodeQL](https://github.com/jasontaylordev/CleanArchitecture/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/jasontaylordev/CleanArchitecture/actions/workflows/codeql-analysis.yml)
-[![Nuget](https://img.shields.io/nuget/v/Clean.Architecture.Solution.Template?label=NuGet)](https://www.nuget.org/packages/Clean.Architecture.Solution.Template)
-[![Nuget](https://img.shields.io/nuget/dt/Clean.Architecture.Solution.Template?label=Downloads)](https://www.nuget.org/packages/Clean.Architecture.Solution.Template)
-[![Discord](https://img.shields.io/discord/893301913662148658?label=Discord)](https://discord.gg/p9YtBjfgGe)
-![Twitter Follow](https://img.shields.io/twitter/follow/jasontaylordev?label=Follow&style=social)
-
-
-
+   # Mini Shop 
 
 ## Technologies
 
@@ -22,8 +11,6 @@
 
 ## Getting Started
 
-The easiest way to get started is to install the [NuGet package](https://www.nuget.org/packages/Clean.Architecture.Solution.Template) and run `dotnet new ca-sln`:
-
 1. Install the latest [.NET 7 SDK](https://dotnet.microsoft.com/download/dotnet/7.0)
 2. Navigate to `src/EShop.Api` and launch the project using `dotnet run`
 3. go to http://localhost:64708/swagger
@@ -33,8 +20,7 @@ The easiest way to get started is to install the [NuGet package](https://www.nug
 
 The template is configured (SQL Server).
 
-If you would like to use SQL Server, you will need to update **WebUI/appsettings.json** as follows:
-
+If you would like to use SQL Server, you will need to update **Api/appsettings.json** as follows:
 
 
 Verify that the **DefaultConnection** connection string within **appsettings.json** points to a valid SQL Server instance. 
@@ -42,9 +28,6 @@ Verify that the **DefaultConnection** connection string within **appsettings.jso
 When you run the application the database will be automatically created (if necessary) and the latest migrations will be applied.
 
 ### Database Migrations
-
-To use `dotnet-ef` for your migrations first ensure that "UseInMemoryDatabase" is disabled, as described within previous section.
-Then, add the following flags to your command (values assume you are executing from repository root)
 
 * `--project src/Infrastructure` (optional if in this folder)
 * `--startup-project src/EShop.Api`
