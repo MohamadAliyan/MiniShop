@@ -26,14 +26,7 @@ public class CartService : Service, ICartService
         
     }
 
-    //public int CalculateDiscount(int amount, int discountAmount, int discountPercent)
-    //{
-
-    //   var total = amount - discountAmount;
-    //  var  totalamount = total * discountPercent / 100;
-    //    return totalamount;
-
-    //}
+    
 
 
     public int CalculateDiscount(int amount, int discountAmount, int discountPercent)
@@ -97,7 +90,7 @@ public class CartService : Service, ICartService
     public Task<int> AddToCart(CreateCartCommand createCartCommand)
     {
      
-       // var cart = GetCurrentCart(createCartCommand.UserId);
+       
         var cart = GetCurrentCart(_currentUserService.UserId);
         if (cart != null)
         {

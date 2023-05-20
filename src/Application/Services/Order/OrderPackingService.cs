@@ -12,13 +12,19 @@ public class OrderPackingService : Service, IOrderPackingService
     private readonly IOrderRepository _orderRepository;
     private readonly ICartRepository _cartRepository;
     private readonly ICurrentUserService _currentUserService;
-
-    public OrderPackingService(IOrderPackingRepository OrderPackingRepository, IOrderRepository orderRepository, ICartRepository cartRepository, ICurrentUserService currentUserService)
+ private readonly IOrderPackingCostStrategy _orderPackingCostStrategy;
+    public OrderPackingService(
+        IOrderPackingRepository OrderPackingRepository,
+        IOrderRepository orderRepository,
+        ICartRepository cartRepository, 
+        ICurrentUserService currentUserService
+        )
     {
         _OrderPackingRepository = OrderPackingRepository;
         _orderRepository = orderRepository;
         _cartRepository = cartRepository;
         _currentUserService = currentUserService;
+        
     }
 
     public int CalculateCost(ProductType productType, int totalAmountOrder)
@@ -55,7 +61,8 @@ public class OrderPackingService : Service, IOrderPackingService
             var orderpacking = new OrderPacking
             {
                 OrderId = orderId,
-                Cost = item.Key.Type == ProductType.Normal ? Constant.PostCost : Constant.ExpressPostCost,
+//                Cost =( item.Key.Type == ProductType.Normal ? Constant.PostCost : Constant.ExpressPostCost),
+                Cost = ShippingCost(item.Key.Type),
                 //TotalAmount = CalculateCost(item.Key.Type,item.Sum(p=>(p.Amount*p.Quantity))),
                 TotalAmount = CalculateCost(item.Key.Type, currentOrder.TotalAmount / groupedOrderItems.Count),
                 ShippingMethodType = item.Key.Type == ProductType.Normal ? ShippingMethodType.Post : ShippingMethodType.ExpressPost,
@@ -73,5 +80,24 @@ public class OrderPackingService : Service, IOrderPackingService
         }
         return _OrderPackingRepository.SaveChanges();
 
+    }
+
+    private int  ShippingCost(ProductType type)
+    {
+        switch (type)
+        {
+            case ProductType.Normal:
+                var normal= new OrderPackingCost(new NormalOrderPackingCostStrategy());
+                return normal.CalculateCost();
+
+            case ProductType.Breackable:
+                var Breackable = new OrderPackingCost(new BreackableOrderPackingCostStrategy());
+                return Breackable.CalculateCost();
+
+            default:
+                var defaultCalc = new OrderPackingCost(new NormalOrderPackingCostStrategy());
+                return defaultCalc.CalculateCost();
+
+        }
     }
 }
