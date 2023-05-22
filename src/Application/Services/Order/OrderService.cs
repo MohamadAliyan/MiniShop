@@ -119,11 +119,7 @@ public class OrderService : Service, IOrderService
     {
         var currentOrder = _orderRepository.GetBy(p => p.UserId == _currentUserService.UserId)
     .                   Include(p => p.OrderItems).ThenInclude(p=>p.Product)
-           
-
                          .ProjectTo<OrderDto>(_mapper.ConfigurationProvider)
-                         
-                         
                         .PaginatedListAsync(request.PageNumber, request.PageSize);
 
         return currentOrder;

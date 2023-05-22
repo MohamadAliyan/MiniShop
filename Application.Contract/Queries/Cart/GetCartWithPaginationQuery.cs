@@ -7,7 +7,7 @@ using Application.Contract.Common.Models;
 using MediatR;
 
 namespace Application.Contract.Queries;
-public record GetOrdersWithPaginationQuery : IRequest<PaginatedList<OrderDto>>
+public record GetCartWithPaginationQuery : IRequest<PaginatedList<CartDto>>
 {
     
     public int PageNumber { get; init; } = 1;

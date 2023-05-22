@@ -1,11 +1,16 @@
 ﻿
 using Application.Contract.Commands;
 using Application.Contract.Common.Interfaces;
+using Application.Contract.Common.Models;
+using Application.Contract.Queries;
 using Application.Contract.Services;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using EShop.Domain;
 using EShop.Domain.Common;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Application.Contract.Common.Mappings;
 
 namespace EShop.Application.Services;
 
@@ -14,19 +19,21 @@ public class CartService : Service, ICartService
     private readonly ICartRepository _cartRepository;
     private readonly IProductRepository _productRepository;
     private readonly ICurrentUserService _currentUserService;
+    private readonly IMapper _mapper;
+
 
     public CartService(ICartRepository cartRepository, IProductRepository productRepository
 , ICurrentUserService currentUserService
-        
+, IMapper mapper
         )
     {
         _cartRepository = cartRepository;
         _productRepository = productRepository;
         _currentUserService = currentUserService;
-        
+        _mapper = mapper;
     }
 
-    
+
 
 
     public int CalculateDiscount(int amount, int discountAmount, int discountPercent)
@@ -143,6 +150,22 @@ public class CartService : Service, ICartService
             _cartRepository.Insert(entity);
             return _cartRepository.SaveChanges();
         }
+
+    }
+
+
+
+    public Task<PaginatedList<CartDto>> GetCarts(GetCartWithPaginationQuery request)
+    {
+        var currentOrder = _cartRepository.GetBy(p => p.UserId == _currentUserService.UserId)
+    .Include(p => p.CartItems).ThenInclude(p => p.Product)
+                         .ProjectTo<CartDto>(_mapper.ConfigurationProvider)
+                        .PaginatedListAsync(request.PageNumber, request.PageSize);
+
+        return currentOrder;
+
+
+
 
     }
 }
